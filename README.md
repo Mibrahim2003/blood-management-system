@@ -1,6 +1,6 @@
 # Blood Donation Management System
 
-This project is a comprehensive blood donation management system that provides a graphical user interface (GUI) for managing donors, receivers, blood units, and blood requests. The system is built using Python with Tkinter for the GUI and PostgreSQL for data storage.
+A comprehensive application for managing blood donation centers, built with Python, Tkinter, and PostgreSQL.
 
 ## Features
 
@@ -16,41 +16,42 @@ This project is a comprehensive blood donation management system that provides a
 ```
 blood_donation_system
 ├── src
-│   ├── app.py                 # Main application entry point
+│   ├── app.py                  # Main application entry point
 │   ├── database
-│   │   ├── __init__.py
-│   │   ├── db_config.py       # Configuration for database connection
 │   │   ├── connection.py       # Handles database connections
-│   │   └── repositories
-│   │       ├── __init__.py
-│   │       ├── donor_repo.py   # Functions for donor management
-│   │       ├── receiver_repo.py # Functions for receiver management
-│   │       ├── blood_unit_repo.py # Functions for blood unit management
-│   │       ├── blood_request_repo.py # Functions for blood request management
-│   │       └── medical_conditions_repo.py # Functions for medical conditions management
-│   ├── models
-│   │   ├── __init__.py
-│   │   ├── donor.py            # Donor model
-│   │   ├── receiver.py         # Receiver model
-│   │   ├── blood_unit.py       # Blood unit model
-│   │   ├── blood_request.py     # Blood request model
-│   │   ├── medical_condition.py  # Medical condition model
-│   │   └── blood_type.py       # Blood type model
-│   ├── views
-│   │   ├── __init__.py
-│   │   ├── main_window.py      # Main GUI window
-│   │   ├── donor_views.py      # Donor-related views
-│   │   ├── receiver_views.py    # Receiver-related views
-│   │   ├── blood_unit_views.py  # Blood unit-related views
-│   │   ├── blood_request_views.py # Blood request-related views
-│   │   └── reports_view.py     # Reports generation and display
-│   └── utils
-│       ├── __init__.py
-│       └── validation.py       # Input validation utilities
-├── database.ini                # Database configuration
+│   │   ├── db_config.py        # Configuration for database connection
+│   │   └── repositories        # Data access layer
+│   │       ├── blood_request_repo.py
+│   │       ├── blood_unit_repo.py
+│   │       ├── donor_repo.py
+│   │       ├── medical_conditions_repo.py
+│   │       └── receiver_repo.py
+│   ├── models                  # Data models
+│   │   ├── blood_request.py
+│   │   ├── blood_type.py
+│   │   ├── blood_unit.py
+│   │   ├── donor.py
+│   │   ├── medical_condition.py
+│   │   └── receiver.py
+│   ├── utils                   # Utility functions
+│   │   ├── fix_blood_units.py
+│   │   ├── fix_database.py
+│   │   ├── generate_test_data.py
+│   │   ├── initialize_db.py
+│   │   └── validation.py
+│   └── views                   # User interface
+│       ├── blood_request_views.py
+│       ├── blood_unit_views.py
+│       ├── donor_views.py
+│       ├── enhanced_blood_unit_views.py
+│       ├── main_window.py
+│       ├── receiver_views.py
+│       ├── reports_view.py
+│       └── simplified_blood_unit_views.py
+├── database.ini                # Database configuration file
 ├── blood_donation.sql          # SQL schema for the database
-├── requirements.txt            # Project dependencies
-└── README.md                   # Project documentation
+├── launch_app.py               # Entry point script
+└── requirements.txt            # Python package dependencies
 ```
 
 ## Database Schema
@@ -68,59 +69,72 @@ The application uses a PostgreSQL database with the following structure:
 
 1. **Clone the Repository**
    ```
-   git clone <repository-url>
-   cd blood_donation_system
+   git clone https://github.com/Mibrahim2003/blood-donation-system.git
+   cd blood-donation-system
    ```
 
 2. **Install Dependencies**
-   Ensure you have Python installed, then install the required packages:
    ```
    pip install -r requirements.txt
    ```
 
 3. **Configure Database**
-   Update the `utils/database.ini` file with your PostgreSQL database credentials.
+   
+   Update the `database.ini` file with your PostgreSQL database credentials:
+   ```ini
+   [postgresql]
+   host=localhost
+   database=blood_donation
+   user=your_username
+   password=your_password
+   ```
 
-4. **Run the Application**
-   Execute the main application using the provided launcher:
+4. **Initialize Database**
+   
+   The application will automatically create the necessary tables on first run, or you can run:
+   ```
+   python -m src.utils.initialize_db
+   ```
+
+5. **Run the Application**
    ```
    python launch_app.py
    ```
-   
-   The application will automatically initialize the database tables on first run.
 
    **Command Line Options:**
    ```
    python launch_app.py --help                     # Show all available options
    python launch_app.py --run-db-fixes             # Run all database fixes 
-   python launch_app.py --generate-test-data       # Generate 50 test blood units
-   python launch_app.py --generate-test-data --test-units 100  # Generate 100 test blood units
+   python launch_app.py --generate-test-data       # Generate test data
    ```
 
 ## Usage
 
-- The application allows users to manage donors, receivers, and blood requests through a user-friendly interface.
-- Users can add, update, and delete records.
+### Donor Management
+- Register new donors with personal and medical details
+- View and edit donor information
+- Track donation history
 
-### Donors Management
-- View a list of all donors in the system
-- Search for donors by name, blood type, and other attributes
-- Add new donors with personal and medical details
-- Edit existing donor information
-- Delete donors from the system
+### Blood Unit Management
+- Record new blood units with collection date, expiry date, and status
+- Track blood unit status (Available, Reserved, Used, Expired)
+- View available blood units by type
 
-### Receivers Management
-- View a list of all blood receivers
-- Search for receivers with highlighted results matching the search term
-- Add new receivers with comprehensive validation for all fields
-- View detailed receiver information including personal, medical, and contact details
-- Edit existing receiver information with field validation
-- Delete receivers from the system with confirmation
+### Blood Request Management
+- Register new blood requests from receivers
+- Set priority levels for requests
+- Assign available blood units to requests
+- Track request status (Pending, Processing, Fulfilled, Cancelled)
+
+### Enhanced Features
+- Automatic status updates when all requested blood units are fulfilled
+- Validation of blood type compatibility during assignment
+- Reports for blood inventory and usage statistics
 
 ## Contributing
 
-Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
